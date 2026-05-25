@@ -1,0 +1,114 @@
+plugins {
+    id 'fabric-loom' version "${loom_version}"
+}
+
+// Version string visible in fabric.mod.json stays as the plain mod version
+version = rootProject.findProperty('mod_version') ?: project.mod_version
+group   = rootProject.findProperty('maven_group') ?: project.maven_group
+
+base {
+    // Produces smart-placement-mc1.21.4-1.0.0.jar
+    archivesName = (rootProject.findProperty('archives_base_name') ?: project.archives_base_name) + '-mc1.21.4'
+}
+
+// ── Loom ──────────────────────────────────────────────────────────────────────
+loom {
+    splitEnvironmentSourceSets()
+    accessWidenerPath = rootProject.file('src/main/resources/smart_placement.accesswidener')
+    mods {
+        'smart_placement' {
+            sourceSet sourceSets.main
+            sourceSet sourceSets.client
+        }
+    }
+}
+
+// ── Shared source setup ────────────────────────────────────────────────────────
+// Root src/main/java + src/main/resources are shared verbatim.
+// Root src/client/java is shared EXCEPT PlacementPreview.java, which this subproject
+// overrides with a 1.21.4-compatible implementation (no render-pipeline wireframe).
+
+def sharedClientSrcDir = rootProject.file('src/client/java')
+def localClientSrcDir  = file('src/client/java')   // only PlacementPreview.java lives here
+
+// Copy shared client source (minus PlacementPreview.java) into a build-time generated dir
+// so the compiler never sees two copies of the same class.
+def genClientSrcDir = layout.buildDirectory.dir('generated/sharedClientJava')
+
+tasks.register('copySharedClientSource', Copy) {
+    // Always start fresh so removed/re-excluded files don't linger
+    doFirst {
+        delete(genClientSrcDir)
+    }
+    from(sharedClientSrcDir) {
+        // Exclude files that have version-specific overrides in this subproject
+        exclude 'dev/smartplacement/client/feature/PlacementPreview.java'
+        exclude 'dev/smartplacement/client/SmartPlacementClient.java'
+    }
+    into(genClientSrcDir)
+    // Always re-copy when root source changes
+    inputs.dir(sharedClientSrcDir)
+    outputs.dir(genClientSrcDir)
+}
+
+afterEvaluate {
+    // Override main source sets → root's shared directories
+    sourceSets.main.java.srcDirs       = [rootProject.file('src/main/java')]
+    sourceSets.main.resources.srcDirs  = [rootProject.file('src/main/resources')]
+
+    // Client source = generated shared (no PlacementPreview) + local override
+    sourceSets.client.java.srcDirs = [
+        genClientSrcDir.get().asFile,
+        localClientSrcDir
+    ]
+}
+
+tasks.named('compileClientJava').configure {
+    dependsOn('copySharedClientSource')
+}
+// sourcesJar is registered lazily by java { withSourcesJar() } — use matching to wire the dep
+tasks.matching { it.name == 'sourcesJar' }.configureEach {
+    dependsOn('copySharedClientSource')
+}
+
+// ── Repositories ──────────────────────────────────────────────────────────────
+repositories {
+    maven { name = 'shedaniel'; url = 'https://maven.shedaniel.me/' }
+    maven { name = 'Terraformers'; url = 'https://maven.terraformersmc.com/' }
+    mavenCentral()
+}
+
+// ── Dependencies ──────────────────────────────────────────────────────────────
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings  "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    modImplementation "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}"
+    modCompileOnly    "com.terraformersmc:modmenu:${project.modmenu_version}"
+    modLocalRuntime   "com.terraformersmc:modmenu:${project.modmenu_version}"
+}
+
+// ── Resources ─────────────────────────────────────────────────────────────────
+processResources {
+    // Pull the template from root resources; the generated dir is already in sourceSets.main.resources
+    inputs.property 'version',      project.version
+    inputs.property 'mc_range',     project.mc_range
+
+    filesMatching('fabric.mod.json') {
+        expand 'version': project.version, 'minecraft_range': project.mc_range
+    }
+}
+
+// ── Java ──────────────────────────────────────────────────────────────────────
+tasks.withType(JavaCompile).configureEach { it.options.release = 21 }
+
+java {
+    withSourcesJar()
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+jar {
+    from('LICENSE') { rename { "${it}_${project.base.archivesName.get()}" } }
+}
