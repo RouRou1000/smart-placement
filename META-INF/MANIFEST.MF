@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Implementation-Title: Gradle
+Implementation-Version: 9.2.0
+Created-By: 21.0.9 (Eclipse Adoptium)
+

@@ -1,0 +1,54 @@
+{
+  "modmenu.nameTranslation.smart_placement": "Smart Placement",
+  "modmenu.descriptionTranslation.smart_placement": "Invert directional block placement while sneaking.",
+
+  "config.smart_placement.title": "Smart Placement Config",
+
+  "config.smart_placement.category.general":  "General",
+  "config.smart_placement.category.perBlock":  "Per-Block",
+  "config.smart_placement.category.preview":   "Preview",
+  "config.smart_placement.category.feedback":  "Feedback",
+  "config.smart_placement.category.bonus":     "Bonus Features",
+
+  "config.smart_placement.enabled":               "Enable Smart Placement",
+  "config.smart_placement.enabled.tooltip":        "Master switch. Disables all mod behaviour when off.",
+  "config.smart_placement.sneakInversion":         "Sneak Inversion",
+  "config.smart_placement.sneakInversion.tooltip": "Hold Sneak while placing a directional block to flip its facing.",
+  "config.smart_placement.invertOnKeybind":        "Inversion Toggle Key",
+  "config.smart_placement.invertOnKeybind.tooltip":"Use a dedicated keybind to toggle inversion instead of Sneak.",
+
+  "config.smart_placement.perBlock_allDirectional":         "All Directional Blocks",
+  "config.smart_placement.perBlock_allDirectional.tooltip": "Apply inversion to every block that has a FACING property.",
+  "config.smart_placement.perBlock_observer":      "Observer",
+  "config.smart_placement.perBlock_piston":        "Piston",
+  "config.smart_placement.perBlock_stickyPiston":  "Sticky Piston",
+  "config.smart_placement.perBlock_dispenser":     "Dispenser",
+  "config.smart_placement.perBlock_dropper":       "Dropper",
+  "config.smart_placement.perBlock_crafter":       "Crafter",
+
+  "config.smart_placement.showPreview":            "Show Placement Preview",
+  "config.smart_placement.previewColor":           "Preview Colour",
+  "config.smart_placement.previewColor.tooltip":   "Colour of the ghost-block outline (RGB hex).",
+  "config.smart_placement.previewOpacity":         "Preview Opacity",
+
+  "config.smart_placement.showMessages":           "Show Placement Messages",
+  "config.smart_placement.useActionBar":           "Use Action Bar",
+  "config.smart_placement.enableSounds":           "Placement Sounds",
+  "config.smart_placement.debugLogging":           "Debug Logging",
+
+  "config.smart_placement.scrollRotation":          "Scroll Wheel Rotation",
+  "config.smart_placement.scrollRotation.tooltip":  "Sneak + scroll to cycle block facing before placing.",
+  "config.smart_placement.smartStairs":             "Smart Stairs",
+  "config.smart_placement.smartStairs.tooltip":     "Auto-select stair half (top/bottom) from click position.",
+  "config.smart_placement.placementMemory":         "Placement Memory",
+  "config.smart_placement.placementMemory.tooltip": "Remember last-used facing per block type.",
+
+  "key.smart_placement.toggle_inversion": "Toggle Inversion",
+  "key.smart_placement.cycle_facing":     "Cycle Facing",
+  "key.categories.smart_placement":       "Smart Placement",
+  "key.category.smart_placement":          "Smart Placement",
+
+  "smart_placement.message.preview_facing":       "§eSmart Placement: will face → %s",
+  "smart_placement.message.inverted":             "§aSmart Placement: facing inverted",
+  "smart_placement.message.scroll_direction":     "§aSmart Placement: facing → %s"
+}

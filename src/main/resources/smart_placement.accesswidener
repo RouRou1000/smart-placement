@@ -1,0 +1,5 @@
+accessWidener   v2   named
+
+# Allow BlockItemServerMixin to redirect the getPlacementState call inside BlockItem.place()
+# (The method is public so no widener is strictly needed; this file exists as a placeholder
+#  in case future mixins require field or method access widening.)

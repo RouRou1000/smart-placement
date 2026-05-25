@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "dev.smartplacement.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "BlockItemServerMixin"
+  ],
+  "client": [
+    "client.ClientPlayerInteractionMixin",
+    "client.MouseHandlerScrollMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

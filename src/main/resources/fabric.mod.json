@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "id": "smart_placement",
+  "version": "${version}",
+  "name": "Smart Placement",
+  "description": "Invert directional block placement while sneaking. Observers face you, pistons go backward, dispensers flip — all configurable.",
+  "authors": [
+    "RouRou1000"
+  ],
+  "contact": {
+    "sources": "https://github.com/example/smart-placement",
+    "issues": "https://github.com/example/smart-placement/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/smart_placement/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "dev.smartplacement.SmartPlacementMod"
+    ],
+    "client": [
+      "dev.smartplacement.client.SmartPlacementClient"
+    ],
+    "modmenu": [
+      "dev.smartplacement.client.compat.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "smart_placement.mixins.json"
+  ],
+  "accessWidener": "smart_placement.accesswidener",
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "fabric-api": "*",
+    "minecraft": ">=1.21 <=1.21.11",
+    "java": ">=21",
+    "cloth-config2": "*"
+  },
+  "suggests": {
+    "modmenu": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {},
+      "update_checker": false
+    }
+  }
+}
