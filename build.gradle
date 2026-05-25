@@ -68,20 +68,29 @@ processResources {
 }
 
 // ── Convenience: build all version JARs in one shot ───────────────────────────
+def releaseDir = rootProject.layout.buildDirectory.dir('release')
+
+tasks.register('collectJars', Copy) {
+    group = 'build'
+    description = 'Copies all remapped version JARs into build/release/.'
+    dependsOn tasks.named('remapJar'),
+              project(':v1_21_4').tasks.named('remapJar'),
+              project(':v1_21_5').tasks.named('remapJar')
+    into(releaseDir)
+    [project, project(':v1_21_4'), project(':v1_21_5')].each { p ->
+        from(p.tasks.named('remapJar'))
+    }
+}
+
 tasks.register('buildAll') {
     group = 'build'
-    description = 'Builds JARs for every supported MC version group.'
-    dependsOn tasks.named('build'),
-              project(':v1_21_4').tasks.named('build'),
-              project(':v1_21_5').tasks.named('build')
+    description = 'Builds JARs for every supported MC version group and collects them in build/release/.'
+    dependsOn tasks.named('collectJars')
     doLast {
         println ''
-        println '=== Smart Placement \u2013 version JARs ==='
-        [project, project(':v1_21_4'), project(':v1_21_5')].each { p ->
-            p.tasks.withType(org.gradle.jvm.tasks.Jar).matching { it.name == 'jar' }.each { j ->
-                if (j.archiveFile.get().asFile.exists())
-                    println "  ${j.archiveFile.get().asFile.name}"
-            }
+        println '=== Smart Placement \u2013 version JARs (build/release/) ==='
+        releaseDir.get().asFile.listFiles()?.sort()?.each { f ->
+            println "  ${f.name}  (${f.length()} bytes)"
         }
     }
 }
