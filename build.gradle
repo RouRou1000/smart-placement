@@ -72,11 +72,12 @@ tasks.register('buildAll') {
     group = 'build'
     description = 'Builds JARs for every supported MC version group.'
     dependsOn tasks.named('build'),
-              project(':v1_21_4').tasks.named('build')
+              project(':v1_21_4').tasks.named('build'),
+              project(':v1_21_5').tasks.named('build')
     doLast {
         println ''
         println '=== Smart Placement \u2013 version JARs ==='
-        [project, project(':v1_21_4')].each { p ->
+        [project, project(':v1_21_4'), project(':v1_21_5')].each { p ->
             p.tasks.withType(org.gradle.jvm.tasks.Jar).matching { it.name == 'jar' }.each { j ->
                 if (j.archiveFile.get().asFile.exists())
                     println "  ${j.archiveFile.get().asFile.name}"

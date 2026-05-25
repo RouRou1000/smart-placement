@@ -14,5 +14,6 @@ rootProject.name = 'smart-placement'
 // Version-specific subprojects — each produces a JAR compiled against its target MC version
 // Root project = MC 1.21.11 (current build)
 include 'v1_21_4'
+include 'v1_21_5'
 
 rootProject.name = 'smart-placement'
